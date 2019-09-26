@@ -1,0 +1,26 @@
+//Formula creates constituent display names with role, prefix, name, suffix, and lifedates
+//Written by Chad Petrovay, Morgan Library & Museum
+
+LOCAL STRINGVAR DisplayName;
+
+DisplayName := {MLM_BI_ConXrefs.Role} + ": ";
+
+IF {vgsrpUserAnonymityRightsS_RO.CanSeeAnonymousConst} = 1
+THEN (
+    IF NOT ISNULL({MLM_BI_ConXrefs.UnmaskedPrefix}) AND {MLM_BI_ConXrefs.UnmaskedPrefix} <> "" THEN DisplayName := {MLM_BI_ConXrefs.UnmaskedPrefix}
+    ELSE DisplayName := "";
+
+    IF NOT ISNULL({MLM_BI_ConXrefs.UnmaskedName}) AND {MLM_BI_ConXrefs.UnmaskedName} <> "" THEN DisplayName := DisplayName + (IF DisplayName <> "" THEN " " ELSE "") + {MLM_BI_ConXrefs.UnmaskedName}
+    ELSE DisplayName := DisplayName;
+
+    IF NOT ISNULL({MLM_BI_ConXrefs.UnmaskedSuffix}) AND {MLM_BI_ConXrefs.UnmaskedSuffix} <> "" THEN DisplayName := DisplayName + (IF DisplayName <> "" THEN " " ELSE "") + {MLM_BI_ConXrefs.UnmaskedSuffix}
+    ELSE DisplayName := DisplayName;
+
+    IF NOT ISNULL({MLM_BI_ConXrefs.UnmaskedLifeDates}) AND {MLM_BI_ConXrefs.UnmaskedLifeDates} <> "" THEN DisplayName := DisplayName + (IF DisplayName <> "" THEN " " ELSE "") + "(" + {MLM_BI_ConXrefs.UnmaskedLifeDates} + ")"
+    ELSE DisplayName := DisplayName;
+) ELSE (
+    IF NOT ISNULL({MLM_BI_ConXrefs.MaskedName}) AND {MLM_BI_ConXrefs.MaskedName} <> "" THEN DisplayName := DisplayName + (IF DisplayName <> "" THEN " " ELSE "") + {MLM_BI_ConXrefs.MaskedName}
+    ELSE DisplayName := DisplayName;
+);
+
+DisplayName;
